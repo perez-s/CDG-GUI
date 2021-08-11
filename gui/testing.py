@@ -18,9 +18,9 @@ root.tk.call("set_theme", "light")
 
 #FUNCIONES ROOT
 def boton_registro():
-    pagina_2.lift()
+    pagina_1.lift()
 def boton_calculo():
-    pagina_3.lift()
+    pagina_2.lift()
 
 #VARIABLES DE CONTROL
 operarios_lista1=["Operario 1","David Ramírez","Sebastián Pérez","Fernando Casanova","Jorge Lopera","Cristian Muñoz","Pablo Torres","Jhon Pazos"]
@@ -28,40 +28,26 @@ operarios_lista2=["Operario 2","David Ramírez","Sebastián Pérez","Fernando Ca
 a=StringVar(value=operarios_lista1[0])
 b=StringVar(value=operarios_lista1[0])
 c=BooleanVar()
+
 #PAGINAS
 pagina_1=Frame(root)
 pagina_1.config(background="#FFFFFF")
 pagina_1.place(relx=0.2,relheight=1,relwidth=0.8)
-pagina_1.columnconfigure(index=0,weight=1,uniform="column")
-pagina_1.columnconfigure(index=1,weight=1,uniform="column")
-pagina_1.columnconfigure(index=2,weight=1,uniform="column")
-pagina_1.columnconfigure(index=3,weight=1,uniform="column")
-pagina_1.rowconfigure(index=0,weight=1,uniform="row")
-pagina_1.rowconfigure(index=1,weight=2,uniform="row")
-pagina_1.rowconfigure(index=2,weight=1,uniform="row")
-pagina_1.rowconfigure(index=3,weight=1,uniform="row")
+pagina_1.columnconfigure((0,1),weight=1,uniform="column")
+pagina_1.rowconfigure((0,1,2,3),weight=1,uniform="row")
+
 
 pagina_2=Frame(root)
 pagina_2.config(background="#FFFFFF")
 pagina_2.place(relx=0.2,relheight=1,relwidth=0.8)
-pagina_2.columnconfigure((0,1),weight=1,uniform="column")
-pagina_2.rowconfigure((0,1,2,3),weight=1,uniform="row")
-
-
-pagina_3=Frame(root)
-pagina_3.config(background="#FFFFFF")
-pagina_3.place(relx=0.2,relheight=1,relwidth=0.8)
-pagina_3.columnconfigure((0,1,2),weight=1,uniform="column")
-pagina_3.rowconfigure((0,1,2),weight=1,uniform="column")
+pagina_2.columnconfigure((0,1,2),weight=1,uniform="column")
+pagina_2.rowconfigure((0,1,2),weight=1,uniform="column")
 
 #PESTAÑAS
 pestañas=Frame(root)
 pestañas.config(bg="#F5F5F5")
 pestañas.place(relheight=1,relwidth=0.2)
 pestañas.columnconfigure(index=0,weight=1)
-
-#pestaña_operarios=ttk.Button(pestañas,text="Operarios")
-#pestaña_operarios.grid(column=0,row=0,sticky="nsew",padx=5,pady=5)
 
 home=PhotoImage(file="home.png")
 pestaña_registro=ttk.Button(pestañas,text=" | Registro",image=home,compound="left",command=boton_registro)
@@ -72,23 +58,6 @@ pestaña_calculo=ttk.Button(pestañas,text=" | Calculo",image=measure,compound="
 pestaña_calculo.grid(column=0,row=2,sticky="nsew",padx=5,pady=5)
 
 #PAGINA 1
-####TITULOS
-titulo_operarios=ttk.Label(pagina_1,text="Seleccionar operarios",anchor="center",font=("",15))
-titulo_operarios.grid(column=1,row=0,columnspan=2,sticky="sew",pady=5,padx=5)
-####IMAGENES OPERARIOS
-usuario_1=PhotoImage(file="usuario 1.png")
-usuario_2=PhotoImage(file="usuario 2.png")
-imagen_1=ttk.Label(pagina_1, background="white",image=usuario_1)
-imagen_2=ttk.Label(pagina_1, background="white",image=usuario_2)
-imagen_1.grid(column=1,row=1,sticky="ns",padx=5,pady=5)
-imagen_2.grid(column=2,row=1,sticky="ns",padx=5,pady=5)
-####LISTA DE OPERARIOS
-operarios_optionmenu_1=ttk.OptionMenu(pagina_1,a,*operarios_lista1)
-operarios_optionmenu_1.grid(column=1,row=2,sticky="new",pady=5,padx=5)
-operarios_optionmenu_2=ttk.OptionMenu(pagina_1,b,*operarios_lista2)
-operarios_optionmenu_2.grid(column=2,row=2,sticky="new",pady=5,padx=5)
-
-#PAGINA 2
 
 ####FUNCIONES PAGINA 2
 def seleccionar_operario_1(selection):
@@ -163,22 +132,22 @@ def open_imagen():
     f=filedialog.askopenfile(filetypes=[("Image files",".png .jpg .jpeg .ico")])
 
 ####FRAMES
-columna_registro=ttk.Labelframe(pagina_2,text="")
+columna_registro=ttk.Labelframe(pagina_1,text="")
 columna_registro.grid(column=1,row=0,sticky="nsew",rowspan=3,pady=1,padx=5)
 columna_registro.columnconfigure((0,1),weight=1)
 columna_registro.rowconfigure((0,1,2,3,4,5,6,7),weight=1,uniform="row")
 
-columna_operarios=ttk.Labelframe(pagina_2,text="")
+columna_operarios=ttk.Labelframe(pagina_1,text="")
 columna_operarios.grid(column=0,row=0,sticky="nsew",rowspan=3,pady=1,padx=5)
 columna_operarios.columnconfigure((0),weight=1)
 columna_operarios.rowconfigure((0,1,2,3),weight=1)
 
-botones_operarios=ttk.Labelframe(pagina_2,text="")
+botones_operarios=ttk.Labelframe(pagina_1,text="")
 botones_operarios.grid(column=0,row=3,sticky="nsew",pady=1,padx=5)
 botones_operarios.columnconfigure((0,1),weight=1,uniform="column")
 botones_operarios.rowconfigure((0),weight=1)
 
-botones_registro=ttk.Labelframe(pagina_2,text="")
+botones_registro=ttk.Labelframe(pagina_1,text="")
 botones_registro.grid(column=1,row=3,sticky="nsew",pady=1,padx=5)
 botones_registro.columnconfigure((0,1),weight=1,uniform="column")
 botones_registro.rowconfigure((0),weight=1)
@@ -257,7 +226,7 @@ boton_editar2=ttk.Button(botones_registro,image=pencil,command=editar_2)
 boton_guardar2.grid(column=0,row=0,sticky="nsew")
 boton_editar2.grid(column=1,row=0,sticky="nsew")
 
-pagina_2.lift()
+pagina_1.lift()
 
 root.mainloop()
     
