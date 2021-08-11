@@ -4,7 +4,7 @@ from PIL import ImageTk,Image
 import csv
 import re
 from tkcalendar import Calendar,DateEntry
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 
 #ROOT 
 root=Tk()
@@ -22,12 +22,19 @@ def boton_registro():
 def boton_calculo():
     pagina_2.lift()
 
+
+
+
 #VARIABLES DE CONTROL
 operarios_lista1=["Operario 1","David Ramírez","Sebastián Pérez","Fernando Casanova","Jorge Lopera","Cristian Muñoz","Pablo Torres","Jhon Pazos"]
 operarios_lista2=["Operario 2","David Ramírez","Sebastián Pérez","Fernando Casanova","Jorge Lopera","Cristian Muñoz","Pablo Torres","Jhon Pazos"]
+validacion_lista=[0,0,0,0,0,0,0,0,0,0,0,0,0]
 a=StringVar(value=operarios_lista1[0])
 b=StringVar(value=operarios_lista1[0])
 c=BooleanVar()
+d=('invalid',)
+e=()
+index=0
 
 #PAGINAS
 pagina_1=Frame(root)
@@ -57,6 +64,11 @@ measure=PhotoImage(file="info.png")
 pestaña_calculo=ttk.Button(pestañas,text=" | Calculo",image=measure,compound="left",command=boton_calculo)
 pestaña_calculo.grid(column=0,row=2,sticky="nsew",padx=5,pady=5)
 
+#def testfunction():
+#    print(a.get())
+#
+#testbutton=ttk.Button(pestañas,text="test",command=testfunction)
+#testbutton.grid(column=0,row=9)
 #PAGINA 1
 
 ####FUNCIONES PAGINA 2
@@ -69,17 +81,24 @@ def seleccionar_operario_1(selection):
 def seleccionar_operario_2(selection):
     for i in range(len(operarios_lista2)):
         operarios_optionmenu_1["menu"].entryconfig(i,state="normal")
-    operarios_optionmenu_1["menu"].entryconfig(selection,state="disabled")
-
-def placa_check():
+        operarios_optionmenu_1["menu"].entryconfig(selection,state="disabled")
+    
+def check_placa():
     if c.get() == 0:
-        placa_entry1.config(state="disabled")
+        placa_entry.delete(0,END)
+        placa_entry.config(state="disabled")
+        
     else:
-        placa_entry1.config(state="normal")
+        placa_entry.config(state="normal")
 
 def guardar_1():
-    for child in columna_operarios.winfo_children():
-        child.configure(state="disable")
+    if a.get()=="Operario 1":
+        messagebox.showerror(title="ERROR!", message="Por favor seleccionar operario/s")
+    elif b.get()=="Operario 2":
+        messagebox.showerror(title="ERROR!", message="Por favor seleccionar un segundo operario")
+    else:
+        for child in columna_operarios.winfo_children():
+            child.configure(state="disable")
 
 def editar_1():
     for child in columna_operarios.winfo_children():
@@ -88,45 +107,102 @@ def editar_1():
         operarios_optionmenu_2.configure(state="disable")
 
 def guardar_2():
-    for child in columna_registro.winfo_children():
-        child.configure(state="disable")
+    listavalidacion=[]
+    contador=0
+
+    if modelo_entry.get() == "":
+        A="El campo \"Marca/Modelo\" es obligatorio \n"
+        listavalidacion.append(A)
+        contador+=1
+    
+    if serie_entry.get() == "":
+        B="El campo \"Numero de serie\" es obligatorio \n"
+        listavalidacion.append(B)
+        contador+=1
+    elif serie_entry.state() == d:
+        B="El valor de la entrada \"Numero de serie\" es invalido \n"
+        listavalidacion.append(B)
+        contador+=1
+
+    if c.get() == 1 and placa_entry.get() == "":
+        C="El campo \"Placa\" es obligatorio \n"
+        listavalidacion.append(C)
+        contador+=1
+    elif placa_entry.state() == d:
+        C="El valor de la entrada \"Placa\" es invalido \n"
+        listavalidacion.append(C)
+        contador+=1
+
+    if kilometraje_entry.get() == "":
+        D="El campo \"Kilometraje\" es obligatorio \n"
+        listavalidacion.append(D)
+        contador+=1
+    elif kilometraje_entry.state() == d:
+        D="El valor de la entrada \"Kilometraje\" es invalido \n"
+        listavalidacion.append(D)
+        contador+=1
+
+    if combustible_entry.get() == "":
+        D="El campo \"Combustible\" es obligatorio \n"
+        listavalidacion.append(D)
+        contador+=1
+    elif combustible_entry.state() == d:
+        D="El valor de la entrada \"Combustible\" es invalido \n"
+        listavalidacion.append(D)
+        contador+=1
+    if contador > 0:
+        str1="".join(listavalidacion)
+        messagebox.showerror(title="ERROR!", message=str1)
+    else:
+        for child in columna_registro.winfo_children():
+            child.configure(state="disable")
+    print(listavalidacion)
 
 def editar_2():
     for child in columna_registro.winfo_children():
         child.configure(state="normal")
     if c.get()==0:
-        placa_entry1.configure(state="disabled")
+        placa_entry.configure(state="disabled")
+
+#def validate_serie(*_):
+#    if serie_entry.get() == "":
+#            serie_entry.state(["!invalid"])
+#    else:
+#        try:
+#            int(serie_entry.get())
+#            serie_entry.state(["!invalid"])
+#        except ValueError:
+#            serie_entry.state(["invalid"])
+
+
 
 def validate_kilometraje(*_):
-        if kilometraje_entry.get() == "":
+    if kilometraje_entry.get() == "":
+        kilometraje_entry.state(["!invalid"])
+    else:
+        try:
+            int(kilometraje_entry.get())
             kilometraje_entry.state(["!invalid"])
-        else:
-            try:
-                int(kilometraje_entry.get())
-                kilometraje_entry.state(["!invalid"])
-            except ValueError:
-                kilometraje_entry.state(["invalid"])
+        except ValueError:
+            kilometraje_entry.state(["invalid"])
 
 def validate_combustible(*_):
-        if combustible_entry.get() == "":
+    if combustible_entry.get() == "":
+        combustible_entry.state(["!invalid"])
+    else:
+        try:
+            int(combustible_entry.get())
             combustible_entry.state(["!invalid"])
-        else:
-            try:
-                int(combustible_entry.get())
-                combustible_entry.state(["!invalid"])
-            except ValueError:
-                combustible_entry.state(["invalid"])
+        except ValueError:
+            combustible_entry.state(["invalid"])
+        
 
 
-def validate_placa1(*_):
-        if re.match(r"^[A-Z]{3}\d{3}$",placa_entry1.get()):
-            placa_entry1.state(["!invalid"])
-        else:
-            try:
-                int(placa_entry1.get())
-                placa_entry1.state(["!invalid"])
-            except ValueError:
-                placa_entry1.state(["invalid"])
+def validate_placa(*_):
+    if re.match(r"^[A-Z]{3}\d{3}$",placa_entry.get()) or placa_entry.get()=="":
+        placa_entry.state(["!invalid"])
+    else:
+        placa_entry.state(["invalid"])
 
 def open_imagen():
     f=filedialog.askopenfile(filetypes=[("Image files",".png .jpg .jpeg .ico")])
@@ -158,7 +234,7 @@ fecha_entry=DateEntry(columna_registro,locale='es_ES', date_pattern='dd/MM/yyyy'
 fecha_label.grid(column=0,row=0,padx=10,pady=5,sticky="w")
 fecha_entry.grid(column=1,row=0,padx=5,pady=5)
 
-modelo_label=ttk.Label(columna_registro,text="Modelo",font=("",13))
+modelo_label=ttk.Label(columna_registro,text="Marca/Modelo",font=("",13))
 modelo_entry=ttk.Entry(columna_registro)
 modelo_label.grid(column=0,row=1,padx=10,pady=5,sticky="w")
 modelo_entry.grid(column=1,row=1,padx=5,pady=5)
@@ -167,14 +243,17 @@ serie_label=ttk.Label(columna_registro,text="Numero de serie",font=("",13))
 serie_entry=ttk.Entry(columna_registro)
 serie_label.grid(column=0,row=2,padx=10,pady=5,sticky="w")
 serie_entry.grid(column=1,row=2,padx=5,pady=5)
+#serie_entry.bind("<FocusOut>",validate_serie)
+#serie_entry.bind("<FocusIn>",validate_serie)
+#serie_entry.bind("<KeyRelease>",validate_serie)
 
-placa_checkbutton=ttk.Checkbutton(columna_registro,text="¿Placa?",variable=c,command=placa_check)
-placa_entry1=ttk.Entry(columna_registro,state="disabled")
-placa_entry1.grid(column=1,row=3,pady=5,padx=5)
-placa_checkbutton.grid(column=0,row=3,padx=5,pady=5,sticky="w")
-placa_entry1.bind("<FocusOut>",validate_placa1)
-placa_entry1.bind("<FocusIn>",validate_placa1)
-placa_entry1.bind("<KeyRelease>",validate_placa1)
+check_placabutton=ttk.Checkbutton(columna_registro,text="¿Placa?",variable=c,command=lambda:[check_placa   (),validate_placa()])
+placa_entry=ttk.Entry(columna_registro,state="disabled")
+placa_entry.grid(column=1,row=3,pady=5,padx=5)
+check_placabutton.grid(column=0,row=3,padx=5,pady=5,sticky="w")
+placa_entry.bind("<FocusOut>",validate_placa)
+placa_entry.bind("<FocusIn>",validate_placa)
+placa_entry.bind("<KeyRelease>",validate_placa)
 
 kilometraje_label=ttk.Label(columna_registro,text="Kilometraje",font=("",13))
 kilometraje_entry=ttk.Entry(columna_registro)
@@ -228,7 +307,8 @@ boton_editar2.grid(column=1,row=0,sticky="nsew")
 
 pagina_1.lift()
 
+
 root.mainloop()
-    
+
 
 
